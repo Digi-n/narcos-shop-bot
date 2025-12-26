@@ -114,10 +114,11 @@ async def shop(interaction: discord.Interaction):
 # ======================
 @bot.event
 async def on_ready():
-    await bot.tree.sync(guild=discord.Object(id=GUILD_ID))
+    await bot.tree.sync(guild=discord.Object(id=1451761878089990257))
     print("✅ Shop Bot is Online!")
 
 # ======================
 # RUN
 # ======================
 bot.run(TOKEN)
+
