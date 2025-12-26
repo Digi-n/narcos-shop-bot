@@ -114,11 +114,20 @@ async def shop(interaction: discord.Interaction):
 # ======================
 @bot.event
 async def on_ready():
-    await bot.tree.sync(guild=discord.Object(id=1451761878089990257))
-    print("✅ Shop Bot is Online!")
+    guild = discord.Object(id=1451761878089990257)
+
+    # Clear old commands
+    bot.tree.clear_commands(guild=guild)
+
+    # Sync fresh commands
+    await bot.tree.sync(guild=guild)
+
+    print(f"✅ Bot is online as {bot.user}")
+
 
 # ======================
 # RUN
 # ======================
 bot.run(TOKEN)
+
 
