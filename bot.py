@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask # type: ignore
 import threading
 import discord
 from discord.ext import commands
@@ -14,7 +14,7 @@ def run_web():
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
 
-threading.Thread(target=run_web).start()
+threading.Thread(target=run_web, daemon=True).start()
 # ======================
 # CONFIG
 # ======================
@@ -31,6 +31,7 @@ SYNDICATE_ROLE = "Syndicate Member"
 # ======================
 intents = discord.Intents.default()
 intents.members = True
+intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 # ======================
@@ -126,21 +127,18 @@ async def shop(interaction: discord.Interaction):
 # ======================
 @bot.event
 async def on_ready():
+    if getattr(bot, "synced", False):
+        return
+
     guild = discord.Object(id=1451761878089990257)
 
-    # Clear old commands
     bot.tree.clear_commands(guild=guild)
-
-    # Sync fresh commands
     await bot.tree.sync(guild=guild)
 
+    bot.synced = True
     print(f"✅ Bot is online as {bot.user}")
-
 
 # ======================
 # RUN
 # ======================
 bot.run(TOKEN)
-
-
-
